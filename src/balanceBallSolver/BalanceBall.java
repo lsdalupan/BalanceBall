@@ -2,15 +2,45 @@ package balanceBallSolver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+class Ball{
+	int name;
+	int weight;
+	public Ball(int bname, int bweigh) {
+		name = bname;
+		weight = bweigh;
+	}
+} // end Ball class
 
 public class BalanceBall {
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		int[] arr = {0,0,0,0,1,0,0,0,0,0,0,0};
-		balanceSolver(arr);
+		
+	public int scale(ArrayList<Ball> left, ArrayList<Ball> right, int times) {
+		// returns -1 == left heavier
+		// returns 0 == equal weight
+		// returns 1 = right heavier
+		int value = 0;
+
+		if(getSumWeigh(left)>getSumWeigh(right)) {
+			value = -1;
+		}
+		else if(getSumWeigh(left)<getSumWeigh(right)) {
+			value = 1;
+		}
+		else if(getSumWeigh(left)==getSumWeigh(right)) {
+			value = 0;
+		}
+		return value;
 	}
-	
+		
+	public int getSumWeigh(ArrayList<Ball> balls) {
+		int totalWeight = 0;
+		for (Ball b:balls) {
+			totalWeight += b.weight;
+		}
+		return totalWeight;
+	}
+
 	public static void balanceSolver(int[] arr) {
 		
 		int i,j,ind;
@@ -26,10 +56,11 @@ public class BalanceBall {
 		
 		ind=0;
 		for(i=0;i<12;i++){
-			System.out.print(arr[i]);
+			System.out.print(arr[i] + " ");
 		}
 		System.out.println();
-		System.out.println("---weigh1: A1,A2,A3,A4 vs B1,B2,B3,B4---");
+		System.out.println("---weigh1: 1 2 3 4 vs 5 6 4 8---");
+		
 		for(i=0;i<4;i++) {
 			a.add(arr[ind]);
 			ind++;
@@ -52,43 +83,44 @@ public class BalanceBall {
 		}
 		
 		if(left==right) {
-			System.out.println("A1,A2,A3,A4 == B1,B2,B3,B4");
+			System.out.println("1 2 3 4 == 5 6 7 8");
+			
 			for(i=0;i<3;i++) {
 				left += c.get(i);
 			}
 			for(i=0;i<3;i++) {
 				right += a.get(i);
 			}
-			System.out.println("---weigh2: C1C2C3 vs A1A2A3---");
+			System.out.println("--- weigh2: 9 10 11  vs 1 2 3 ---");
 			if(left==right) {
-				System.out.println("C1C2C3 == A1A2A3");
-				System.out.println("---weigh3: C4 vs A4---");
+				System.out.println("9 10 11 == 1 2 3");
+				System.out.println("--- weigh3: 12 vs 4 ---");
 				if(c.get(3) > a.get(3)) {
-					System.out.println("Heavy Ball: C4");
+					System.out.println("Heavy Ball: 12");
 				}
 				else {
-					System.out.println("Light Ball: C4");
+					System.out.println("Light Ball: 12");
 				}
 			}
 			else if (left>right) {
-				System.out.println("C1C2C3 > A1A2A3");
-				System.out.println("---weigh3: C1 vs C2---");
-				if(c.get(0)==c.get(1)) System.out.println("Heavy Ball: C3");
-				else if(c.get(0)>c.get(1)) System.out.println("Heavy Ball: C1");
-				else if(c.get(0)<c.get(1)) System.out.println("Heavy Ball: C2");
+				System.out.println("9 10 11 > 1 2 3");
+				System.out.println("---weigh3: 9 vs 10 ---");
+				if(c.get(0)==c.get(1)) System.out.println("Heavy Ball: 11");
+				else if(c.get(0)>c.get(1)) System.out.println("Heavy Ball: 9");
+				else if(c.get(0)<c.get(1)) System.out.println("Heavy Ball: 10");
 			}
 			else if (left<right) {
-				System.out.println("C1C2C3 > A1A2A3");
-				System.out.println("---weigh3: C1 vs C2---");
-				if(c.get(0)==c.get(1)) System.out.println("Light Ball: C3");
-				else if(c.get(0)>c.get(1)) System.out.println("Light Ball: C2");
-				else if(c.get(0)<c.get(1)) System.out.println("Light Ball: C1");
+				System.out.println("9 10 11 < 1 2 3");
+				System.out.println("---weigh3: 9 vs 10---");
+				if(c.get(0)==c.get(1)) System.out.println("Light Ball: 11");
+				else if(c.get(0)>c.get(1)) System.out.println("Light Ball: 10");
+				else if(c.get(0)<c.get(1)) System.out.println("Light Ball: 9");
 			}
 		
 		}// compare a==b
 		else if (left>right) {
 			//a is heavier
-			System.out.println("A1A2A3A4 > B1B2B3B4");
+			System.out.println("1 2 3 4 > 5 6 7 8");
 			for(int counter:a) {
 				heavy.add(counter);
 			}
@@ -96,32 +128,32 @@ public class BalanceBall {
 				light.add(counter);
 			}
 			
-			System.out.println("---weigh2: A1A2B1 vs A3A4B2---");
+			System.out.println("---weigh2: 1 2 5 vs 3 4 6 ---");
 			left = heavy.get(0)+heavy.get(1)+light.get(0);
 			right = heavy.get(2)+heavy.get(3)+light.get(1);
 			
 			if(left>right) {
-				System.out.println("A1A2B1 > A3A4B2");
-				System.out.println("---weigh3: A1 vs A2---");
-				if(heavy.get(0)==heavy.get(1)) System.out.println("Light Ball: B2");
-				else if(heavy.get(0)>heavy.get(1)) System.out.println("Heavy Ball: A1");
-				else if(heavy.get(0)<heavy.get(1)) System.out.println("Heavy Ball: A2");
+				System.out.println("1 2 5 > 3 4 6");
+				System.out.println("---weigh3: 1 vs 2---");
+				if(heavy.get(0)==heavy.get(1)) System.out.println("Light Ball: 6");
+				else if(heavy.get(0)>heavy.get(1)) System.out.println("Heavy Ball: 1");
+				else if(heavy.get(0)<heavy.get(1)) System.out.println("Heavy Ball: 2");
 			}
 			else if(left<right) {
-				System.out.println("A1A2B1 > A3A4B2");
+				System.out.println("1 2 5 < 3 4 6");
 				System.out.println("---weigh3: A3 vs A4---");
-				if(heavy.get(2)==heavy.get(3)) System.out.println("Light Ball: B1");
-				else if(heavy.get(2)>heavy.get(3)) System.out.println("Heavy Ball: A3");
-				else if(heavy.get(2)<heavy.get(3)) System.out.println("Heavy Ball: A4");
+				if(heavy.get(2)==heavy.get(3)) System.out.println("Light Ball: 5");
+				else if(heavy.get(2)>heavy.get(3)) System.out.println("Heavy Ball: 3");
+				else if(heavy.get(2)<heavy.get(3)) System.out.println("Heavy Ball: 4");
 			}
 			else if(left==right) {
-				System.out.println("A1A2B1 == A3A4B2");
-				System.out.println("---weigh3: B3 vs B4---");
+				System.out.println("1 2 5 == 3 4 6");
+				System.out.println("---weigh3: 7 vs 8---");
 				if(light.get(2) > light.get(3)) {
-					System.out.println("Light Ball: B4");
+					System.out.println("Light Ball: 8");
 				}
 				else {
-					System.out.println("Light Ball: B3");
+					System.out.println("Light Ball: 7");
 				}
 			}
 			
@@ -129,57 +161,63 @@ public class BalanceBall {
 		}
 		else if (left<right) {
 			//b is heavier
-			System.out.println("A1A2A3A4 < B1B2B3B4");
+			System.out.println("1 2 3 4 < 5 6 7 8");
 			for(int counter:b) {
 				heavy.add(counter);
 			}
 			for(int counter:a) {
 				light.add(counter);
 			}
-			System.out.println("---weigh2: B1B2A1 vs B3B4A2---");
+			System.out.println("---weigh2: 5 6 1 vs 7 8 2 ---");
 			left = heavy.get(0)+heavy.get(1)+light.get(0);
 			right = heavy.get(2)+heavy.get(3)+light.get(1);
 			
 			if(left>right) {
-				System.out.println("B1B2A1 > B3B4A2");
-				System.out.println("---weigh3: B1 vs B2---");
-				if(heavy.get(0)==heavy.get(1)) System.out.println("Light Ball: A2");
-				else if(heavy.get(0)>heavy.get(1)) System.out.println("Heavy Ball: B1");
-				else if(heavy.get(0)<heavy.get(1)) System.out.println("Heavy Ball: B2");
+				System.out.println("5 6 1 > 7 8 2");
+				System.out.println("---weigh3: 5 vs 6 ---");
+				if(heavy.get(0)==heavy.get(1)) System.out.println("Light Ball: 2");
+				else if(heavy.get(0)>heavy.get(1)) System.out.println("Heavy Ball: 5");
+				else if(heavy.get(0)<heavy.get(1)) System.out.println("Heavy Ball: 6");
 			}
 			else if(left<right) {
-				System.out.println("B1B2A1 < B3B4A2");
-				System.out.println("---weigh3: B3 vs B4---");
-				if(heavy.get(2)==heavy.get(3)) System.out.println("Light Ball: A1");
-				else if(heavy.get(2)>heavy.get(3)) System.out.println("Heavy Ball: B3");
-				else if(heavy.get(2)<heavy.get(3)) System.out.println("Heavy Ball: B4");
+				System.out.println("5 6 1 < 7 8 2");
+				System.out.println("---weigh3: 7 vs 8 ---");
+				if(heavy.get(2)==heavy.get(3)) System.out.println("Light Ball: 1");
+				else if(heavy.get(2)>heavy.get(3)) System.out.println("Heavy Ball: 7");
+				else if(heavy.get(2)<heavy.get(3)) System.out.println("Heavy Ball: 8");
 			}
 			else if(left==right) {
-				System.out.println("A1A2B1 == A3A4B2");
-				System.out.println("---weigh3: A3 vs A4---");
+				System.out.println("5 6 1 == 7 8 2");
+				System.out.println("---weigh3: 3 vs 4---");
 				if(light.get(2) > light.get(3)) {
-					System.out.println("Light Ball: A4");
+					System.out.println("Light Ball: 4");
 				}
 				else {
-					System.out.println("Light Ball: A3");
+					System.out.println("Light Ball: 3");
 				}
 			}
 		}
 		
-	}// end of function
-		
-		
+	}// end of balanceSolver function
 	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+//		int[] arr = {0,0,0,0,1,0,0,0,0,0,0,0}; //sample arr
+		//randomize values of array
+		Random rand = new Random();
+		int odd = rand.nextInt(12);
+		int wieghtFlag = rand.nextInt(2);
+		int[] ballArr = new int[12];
+		
+		for(int i=0;i<12;i++) {
+			if(i==odd) {
+				if(wieghtFlag==0) ballArr[i] = -1;
+				else ballArr[i] = 1;
+			}
+			else ballArr[i] = 0;
+		}
+
+		balanceSolver(ballArr);
+	}
 	
-
-}
-
-//public ball{
-//	
-//	public ball() {
-//		
-//	}
-//}
-
-
-
+} // end of BalanceBall class
